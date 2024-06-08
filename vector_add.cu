@@ -1,8 +1,9 @@
-
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
-
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <math.h>
 
 // CUDA kernel for vector addition
 __global__ void vectorAdd(int*a, int*b, int*c, int n){

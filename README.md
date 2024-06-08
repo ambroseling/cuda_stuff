@@ -71,3 +71,8 @@ How do we index a thread?
     - multiple adjacent accesses can be coalesced into a single wide access
     - rows are **NOT** adjacent in memory 
     - multiple accesses to memory that are independent 
+
+
+### Warp divergences vs Thread divergences
+
+### Shared Memory Bank Conflicts
