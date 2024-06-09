@@ -2,6 +2,22 @@
 
 This repo will document my journey of learning CUDA, some things relating to GPU programming.
 
+To compile cuda code:
+```bash
+nvcc -o convolution convolution.cu
+```
+
+To run it:
+```bash
+./convolution
+```
+
+To run a profiler on it:
+```bash
+nvprof ./convolution
+```
+
+
 ### Background
 
 SIMT Model 
