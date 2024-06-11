@@ -92,3 +92,9 @@ How do we index a thread?
 ### Warp divergences vs Thread divergences
 
 ### Shared Memory Bank Conflicts
+
+
+**Temporal**
+- which basic blocks are entered depends on when we are in program execution
+- think single threaded code, kind of like instruction manuals
+

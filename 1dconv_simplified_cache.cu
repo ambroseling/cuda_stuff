@@ -24,30 +24,12 @@ __global__ void convolution_1d_tiled (int* array, int* reuslt, int n){
     //Global thread ID calculation
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // r: calculate the radius of the mask
-    int r = FILTER_LENGTH/2;
+    // Store all elements needed to compute output in shread memory
+    extern __shared__ int s_array[];
 
-    // d: the total number of padded elements
-    int d = 2 * r;
-
-    // n_padded: size of the padded shared memory array
-    int n_padded = blockDim.x + d;
-
-    // Offset for the second set of loads in shared memory
-    int offset = threadIdx.x + blockDim.x
-
-    // Global offset for the array in DRAM
-    int g_offset = blockDim.x * blockIdx.x + offset;
-
-    // Load the lower elements first starting at padding
-    // This ensures divergence only eonce
-
+    // Load elements from the main array to shared memory
+    // This is nautally offset by "r" due to padding included in the array
     s_array[threadIdx.x] = array[tid];
-
-    // Load in the remaining upper elements
-    if(offset < n_padded){
-        s_array[offset] = array[g_offset];
-    }
 
     __syncthreads();
 
@@ -56,8 +38,14 @@ __global__ void convolution_1d_tiled (int* array, int* reuslt, int n){
 
     // Go over each element of the mask
     for (int j = 0; j<m; j++){
+        if((threadIdx.x + j) >= blockDim.x){
+        // only the last warp wil lbe diverged
+        temp += array[tid + j] * mask[j];
+        }
+        else{
         // Ignore elements that hang off
         temp += s_array[threadIdx.x + j] * filter[j];
+        }
     }
     //write back the result
     result[tid] = temp;
